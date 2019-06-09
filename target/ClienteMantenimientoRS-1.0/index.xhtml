@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Gestion de mantenimiento</title>
+        <style type="text/css"> 
+            body {font-size:75%} 
+        </style>
+    </h:head>
+    <p:fieldset legend="Gestion de mantenimiento" style="margin-bottom:20px">
+        <h:form id="form">
+            <p:messages id="messages" showDetail="true" closable="true">
+                <p:autoUpdate />
+            </p:messages>
+            <p:panel header="Reportar Incidente" style="margin-bottom:20px">
+                <h:panelGrid columns="2" cellpadding="5">
+
+                    <p:outputLabel for="console" value="Tipo falla: " />
+                    <p:selectOneRadio id="console" value="#{indexManagedClientBean.bitacoraDTO.tipo}" >
+                        <f:selectItem itemLabel="Mecanica" itemValue="Mecanica" />
+                        <f:selectItem itemLabel="Electrica" itemValue="Electrica" />
+                        <f:selectItem itemLabel="Hidraulica" itemValue="Hidraulica" />
+                    </p:selectOneRadio>
+
+                    <p:outputLabel for="Operador" value="Operador: " />
+                    <p:selectOneMenu id="Operador" value="#{indexManagedClientBean.bitacoraDTO.operador}" style="width:125px">
+                        <f:selectItem itemLabel="Selecione" itemValue="" />
+                        <f:selectItem itemLabel="Sara" itemValue="Sara" />
+                        <f:selectItem itemLabel="Jimmy" itemValue="Jimmy" />
+                        <f:selectItem itemLabel="Gustavo" itemValue="Gustavo" />
+                        <f:selectItem itemLabel="Diego" itemValue="Diego" />
+                    </p:selectOneMenu>
+
+                    <h:outputLabel value="Observaciones : " for="txt_observ"></h:outputLabel>
+                    <p:inputTextarea id="txt_observ" rows="10" cols="50" queryDelay="750" minQueryLength="4" value="#{indexManagedClientBean.bitacoraDTO.observaciones}"/>
+
+                    <p:commandButton id="btn_reset" value="Limpiar" type="reset"/>
+                    <p:commandButton id="Enviar" value="Enviar" update=":form, :forMantenimiento" action="#{indexManagedClientBean.insertarNovedad()}" >
+
+                    </p:commandButton>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+
+        <h:form id="forMantenimiento">
+            <p:commandButton icon="ui-icon-circle-zoomin" value="Buscar" action="#{indexManagedClientBean.consultarBitacora()}" update=":forMantenimiento" />
+            <p:dataTable id="dtbMantenimiento" var="bitacora" value="#{indexManagedClientBean.listaBitacora}" widgetVar="dtbBitacora"
+                         emptyMessage="No hay novedades registradas"
+                         paginator="true" rows="20" paginatorPosition="bottom" 
+                         tableStyleClass="grilla"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                         rowsPerPageTemplate="10,20,40">
+
+                <p:column headerText="fecha registro" >
+                    <h:outputText value="#{bitacora.fechaIni}">
+                        <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Tipo Falla" >
+                    <h:outputText value="#{bitacora.tipo}"/>
+                </p:column>
+
+                <p:column headerText="Operador" >
+                    <h:outputText value="#{bitacora.operador}"/>
+                </p:column>
+
+                <p:column headerText="Observaciones" >
+                    <h:outputText value="#{bitacora.observaciones}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>  
+    </p:fieldset>
+</html>
+
